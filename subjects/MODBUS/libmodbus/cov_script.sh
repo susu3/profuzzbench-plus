@@ -13,18 +13,13 @@ fmode=$5    #file mode -- structured or not
 rm $covfile; touch $covfile
 
 #clear gcov data
-#since the source files of LightFTP are stored in the parent folder of the current folder
+#since the source files of libmodbus are stored in the parent folder of the current folder
 #we use '..' instead of '.' as usual. You may need to update this accordingly for your subject
 gcovr -r .. -s -d > /dev/null 2>&1
 
 #output the header of the coverage file which is in the CSV format
 #Time: timestamp, l_per/b_per and l_abs/b_abs: line/branch coverage in percentage and absolutate number
 echo "Time,l_per,l_abs,b_per,b_abs" >> $covfile
-
-#clear ftp data
-#this is a LightFTP-specific step
-#we need to clean the ftp shared folder to prevent underterministic behaviors.
-ftpclean
 
 #files stored in replayable-* folders are structured
 #in such a way that messages are separated
@@ -41,11 +36,10 @@ for f in $(echo $folder/$testdir/*.raw); do
   time=$(stat -c %Y $f)
 
   #terminate running server(s)
-  pkill fftp
+  pkill random-test-server
 
-  ftpclean  
-  $replayer $f FTP $pno 1 > /dev/null 2>&1 &
-  timeout -k 0 -s SIGUSR1 3s ./fftp fftp.conf $pno > /dev/null 2>&1
+  $replayer $f MODBUS $pno 1 > /dev/null 2>&1 &
+  timeout -k 0 -s SIGUSR1 3s ./random-test-server $pno > /dev/null 2>&1
   
   wait
   cov_data=$(gcovr -r .. -s | grep "[lb][a-z]*:")
@@ -63,11 +57,10 @@ for f in $(echo $folder/$testdir/id*); do
   time=$(stat -c %Y $f)
 
   #terminate running server(s)
-  pkill fftp
+  pkill random-test-server
   
-  ftpclean  
-  $replayer $f FTP $pno 1 > /dev/null 2>&1 &
-  timeout -k 0 -s SIGUSR1 3s ./fftp fftp.conf $pno > /dev/null 2>&1
+  $replayer $f MODBUS $pno 1 > /dev/null 2>&1 &
+  timeout -k 0 -s SIGUSR1 3s ./random-test-server $pno > /dev/null 2>&1
 
   wait
   count=$(expr $count + 1)
