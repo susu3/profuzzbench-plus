@@ -77,7 +77,7 @@ RUN cd $WORKDIR && \
     patch -p1 < ${WORKDIR}/fuzzing.patch && \
     ./autogen.sh && \
     ./configure && \
-    AFL_USE_ASAN=1 CC=afl-clang-fast make clean all $MAKE_OPT
+    AFL_USE_ASAN=1 CC=afl-clang-fast make clean install $MAKE_OPT
 
 # Set up libmodbus for fuzzing
 # ...libmodbus need no config file???
@@ -91,7 +91,7 @@ RUN cd $WORKDIR && \
     patch -p1 < ${WORKDIR}/gcov.patch && \
     ./autogen.sh && \
     ./configure && \
-    make CFLAGS="-fprofile-arcs -ftest-coverage" CPPFLAGS="-fprofile-arcs -ftest-coverage" CXXFLAGS="-fprofile-arcs -ftest-coverage" LDFLAGS="-fprofile-arcs -ftest-coverage" clean all $MAKE_OPT
+    make CFLAGS="-fprofile-arcs -ftest-coverage" CPPFLAGS="-fprofile-arcs -ftest-coverage" CXXFLAGS="-fprofile-arcs -ftest-coverage" LDFLAGS="-fprofile-arcs -ftest-coverage" clean install $MAKE_OPT
 
 # Set up libmodbus for coverage analysis
 RUN cd ${WORKDIR}/libmodbus-cov/tests
