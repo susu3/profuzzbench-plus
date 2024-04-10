@@ -1,0 +1,44 @@
+Binary files a/.DS_Store and b/.DS_Store differ
+Binary files a/.git/index and b/.git/index differ
+diff -urN a/configure.ac b/configure.ac
+--- a/configure.ac	2024-03-22 14:45:04.000000000 +0800
++++ b/configure.ac	2024-04-09 18:11:18.000000000 +0800
+@@ -30,7 +30,8 @@
+ AC_CONFIG_SRCDIR([src/modbus.c])
+ AC_CONFIG_AUX_DIR([build-aux])
+ AM_INIT_AUTOMAKE([check-news foreign 1.11 -Wall -Wno-portability silent-rules tar-pax subdir-objects])
+-AC_PROG_CC
++#check C compiler
++AC_PROG_CC([afl-clang-fast clang gcc]) 
+ AC_USE_SYSTEM_EXTENSIONS
+ AC_SYS_LARGEFILE
+ AC_CONFIG_MACRO_DIR([m4])
+diff -urN a/tests/random-test-server.c b/tests/random-test-server.c
+--- a/tests/random-test-server.c	2024-03-22 14:45:04.000000000 +0800
++++ b/tests/random-test-server.c	2024-04-10 17:12:03.000000000 +0800
+@@ -12,14 +12,23 @@
+ #include <stdlib.h>
+ 
+ #include <modbus.h>
++#include <signal.h>
++#include <unistd.h>
+ 
+-int main(void)
++void sig_handler(int signo){
++    if(signo == SIGUSR1)
++        exit(0);
++}
++
++int main(int argc, char *argv[])
+ {
+     int s = -1;
+     modbus_t *ctx;
+     modbus_mapping_t *mb_mapping;
+ 
+-    ctx = modbus_new_tcp("127.0.0.1", 1502);
++    signal(SIGUSR1, sig_handler);
++
++    ctx = modbus_new_tcp("127.0.0.1", argv[1]); //port: 1502
+     /* modbus_set_debug(ctx, TRUE); */
+ 
+     mb_mapping = modbus_mapping_new(500, 500, 500, 500);
