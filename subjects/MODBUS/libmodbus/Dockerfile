@@ -72,12 +72,17 @@ env ASAN_OPTIONS='abort_on_error=1:symbolize=0:detect_leaks=0:detect_stack_use_a
 # Download and compile libmodbus for fuzzing
 RUN cd $WORKDIR && \
     git clone https://github.com/stephane/libmodbus.git && \
+    echo "git clone success" && \
     cd libmodbus && \
     git checkout 5c14f13 && \
+    echo "git check success" && \
     patch -p1 < ${WORKDIR}/fuzzing.patch && \
+    echo "patch success" && \
     ./autogen.sh && \
+    echo "./autogen success" && \
     ./configure && \
-    AFL_USE_ASAN=1 CC=afl-clang-fast make clean install $MAKE_OPT
+    echo "./configure success" && \
+    AFL_USE_ASAN=1 CC=afl-clang-fast make clean all $MAKE_OPT
 
 # Set up libmodbus for fuzzing
 # ...libmodbus need no config file???
@@ -91,7 +96,7 @@ RUN cd $WORKDIR && \
     patch -p1 < ${WORKDIR}/gcov.patch && \
     ./autogen.sh && \
     ./configure && \
-    make CFLAGS="-fprofile-arcs -ftest-coverage" CPPFLAGS="-fprofile-arcs -ftest-coverage" CXXFLAGS="-fprofile-arcs -ftest-coverage" LDFLAGS="-fprofile-arcs -ftest-coverage" clean install $MAKE_OPT
+    make CFLAGS="-fprofile-arcs -ftest-coverage" CPPFLAGS="-fprofile-arcs -ftest-coverage" CXXFLAGS="-fprofile-arcs -ftest-coverage" LDFLAGS="-fprofile-arcs -ftest-coverage" clean all $MAKE_OPT
 
 # Set up libmodbus for coverage analysis
 RUN cd ${WORKDIR}/libmodbus-cov/tests
