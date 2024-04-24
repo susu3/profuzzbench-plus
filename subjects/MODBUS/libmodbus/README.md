@@ -1,7 +1,7 @@
 Please carefully read the [main README.md](../../../README.md), which is stored in the benchmark's root folder, before following this subject-specific guideline.
 
 # Fuzzing libmodbus server with AFLNet and AFLnwe
-Please follow the steps below to run and collect experimental results for libmodbus, which is a lightweight File Transfer Protocol (FTP) server.
+Please follow the steps below to run and collect experimental results for libmodbus, which is a free software library to send/receive data with a device which respects the Modbus protocol.
 
 ## Step-1. Build a docker image
 The following commands create a docker image tagged libmodbus. The image should have everything available for fuzzing and code coverage calculation.
@@ -17,10 +17,10 @@ The following commands run 4 instances of AFLNet and 4 instances of AFLnwe to si
 
 ```bash
 cd $PFBENCH
-mkdir results-lightftp
+mkdir results-libmodbus
 
-profuzzbench_exec_common.sh lightftp 4 results-lightftp aflnet out-lightftp-aflnet "-P FTP -D 10000 -q 3 -s 3 -E -K" 3600 5 &
-profuzzbench_exec_common.sh lightftp 4 results-lightftp aflnwe out-lightftp-aflnwe "-D 10000 -K" 3600 5
+profuzzbench_exec_common.sh libmodbus 4 results-libmobus aflnet out-libmodbus-aflnet "-P FTP -D 10000 -q 3 -s 3 -E -K" 3600 5 &
+profuzzbench_exec_common.sh libmodbus 4 results-libmodbus aflnwe out-libmodbus-aflnwe "-D 10000 -K" 3600 5
 ```
 
 ## Step-3. Collect the results
