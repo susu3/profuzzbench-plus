@@ -103,7 +103,7 @@ RUN cd ${WORKDIR}/libmodbus-cov/tests
 
 
 COPY --chown=ubuntu:ubuntu in-modbus ${WORKDIR}/in-modbus
-COPY --chown=ubuntu:ubuntu modbus.dict ${WORKDIR}/modbus.dict
+# COPY --chown=ubuntu:ubuntu modbus.dict ${WORKDIR}/modbus.dict
 COPY --chown=ubuntu:ubuntu cov_script.sh ${WORKDIR}/cov_script
 COPY --chown=ubuntu:ubuntu run.sh ${WORKDIR}/run
 
