@@ -28,6 +28,12 @@ diff -urN a/tests/random-test-server.c b/tests/random-test-server.c
      modbus_mapping_t *mb_mapping;
  
 -    ctx = modbus_new_tcp("127.0.0.1", 1502);
++
++    if (argc != 2){
++        fprintf(stderr, "Usage: %s port\n", argv[0]);
++        return 1;
++    }
++    int port = atoi(argv[1]);
 +    ctx = modbus_new_tcp("127.0.0.1", argv[1]); //port: 1502
      /* modbus_set_debug(ctx, TRUE); */
  
