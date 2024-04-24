@@ -15,12 +15,13 @@ diff -urN a/configure.ac b/configure.ac
  AC_CONFIG_MACRO_DIR([m4])
 diff -urN a/tests/random-test-server.c b/tests/random-test-server.c
 --- a/tests/random-test-server.c	2024-03-22 14:45:04.000000000 +0800
-+++ b/tests/random-test-server.c	2024-04-08 17:59:22.000000000 +0800
-@@ -13,13 +13,13 @@
++++ b/tests/random-test-server.c	2024-04-24 16:42:06.000000000 +0800
+@@ -13,13 +13,19 @@
  
  #include <modbus.h>
  
 -int main(void)
++
 +int main(int argc, char *argv[])
  {
      int s = -1;
@@ -28,13 +29,12 @@ diff -urN a/tests/random-test-server.c b/tests/random-test-server.c
      modbus_mapping_t *mb_mapping;
  
 -    ctx = modbus_new_tcp("127.0.0.1", 1502);
-+
 +    if (argc != 2){
 +        fprintf(stderr, "Usage: %s port\n", argv[0]);
 +        return 1;
 +    }
 +    int port = atoi(argv[1]);
-+    ctx = modbus_new_tcp("127.0.0.1", argv[1]); //port: 1502
++    ctx = modbus_new_tcp("127.0.0.1", port); //port: 1502
      /* modbus_set_debug(ctx, TRUE); */
  
      mb_mapping = modbus_mapping_new(500, 500, 500, 500);
