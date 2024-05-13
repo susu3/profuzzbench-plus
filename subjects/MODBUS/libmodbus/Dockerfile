@@ -88,7 +88,7 @@ RUN cd $WORKDIR && \
 # Set up libmodbus for fuzzing
 # ...libmodbus need no config file???
 RUN cd ${WORKDIR}/libmodbus/tests && \
-    CC=afl-clang-fast random-test-server.c -I ../src ../src/.libs/libmodbus.a -o server 
+    AFL_USE_ASAN=1 CC=afl-clang-fast random-test-server.c -I ../src ../src/.libs/libmodbus.a -o server 
 
 
 # Download and compile libmodbus for coverage analysis
@@ -103,7 +103,7 @@ RUN cd $WORKDIR && \
 
 # Set up libmodbus for coverage analysis
 RUN cd ${WORKDIR}/libmodbus-cov/tests
-    CC=afl-clang-fast random-test-server.c -I ../src ../src/.libs/libmodbus.a -o server 
+    cc random-test-server.c -I ../src ../src/.libs/libmodbus.a -fprofile-arcs -ftest-coverage -o server
 
 
 COPY --chown=ubuntu:ubuntu in-modbus ${WORKDIR}/in-modbus
