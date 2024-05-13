@@ -80,13 +80,16 @@ RUN cd $WORKDIR && \
     echo "patch success" && \
     ./autogen.sh && \
     echo "./autogen success" && \
-    ./configure && \
+    ./configure --enable-static && \
     echo "./configure success" && \
-    AFL_USE_ASAN=1 CC=afl-clang-fast make clean all $MAKE_OPT
+    AFL_USE_ASAN=1 CC=afl-clang-fast make clean all $MAKE_OPT && \
+
 
 # Set up libmodbus for fuzzing
 # ...libmodbus need no config file???
-RUN cd ${WORKDIR}/libmodbus/tests 
+RUN cd ${WORKDIR}/libmodbus/tests && \
+    CC=afl-clang-fast random-test-server.c -I ../src ../src/.libs/libmodbus.a -o server 
+
 
 # Download and compile libmodbus for coverage analysis
 RUN cd $WORKDIR && \
@@ -95,11 +98,12 @@ RUN cd $WORKDIR && \
     git checkout 5c14f13 && \
     patch -p1 < ${WORKDIR}/gcov.patch && \
     ./autogen.sh && \
-    ./configure && \
+    ./configure --enable-static && \
     make CFLAGS="-fprofile-arcs -ftest-coverage" CPPFLAGS="-fprofile-arcs -ftest-coverage" CXXFLAGS="-fprofile-arcs -ftest-coverage" LDFLAGS="-fprofile-arcs -ftest-coverage" clean all $MAKE_OPT
 
 # Set up libmodbus for coverage analysis
 RUN cd ${WORKDIR}/libmodbus-cov/tests
+    CC=afl-clang-fast random-test-server.c -I ../src ../src/.libs/libmodbus.a -o server 
 
 
 COPY --chown=ubuntu:ubuntu in-modbus ${WORKDIR}/in-modbus
