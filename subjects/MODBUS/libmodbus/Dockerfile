@@ -86,7 +86,7 @@ RUN cd $WORKDIR && \
 
 
 # Set up libmodbus for fuzzing
-# ...libmodbus need no config file???
+# libmodbus does not generate an executable file after make all
 RUN cd ${WORKDIR}/libmodbus/tests && \
     AFL_USE_ASAN=1 CC=afl-clang-fast random-test-server.c -I ../src ../src/.libs/libmodbus.a -o server 
 
