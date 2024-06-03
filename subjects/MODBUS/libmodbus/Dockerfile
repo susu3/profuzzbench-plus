@@ -82,7 +82,7 @@ RUN cd $WORKDIR && \
     echo "./autogen success" && \
     ./configure --enable-static && \
     echo "./configure success" && \
-    AFL_USE_ASAN=1 CC=afl-clang-fast make clean all $MAKE_OPT && \
+    AFL_USE_ASAN=1 CC=afl-clang-fast make clean all $MAKE_OPT 
 
 
 # Set up libmodbus for fuzzing
