@@ -36,10 +36,10 @@ for f in $(echo $folder/$testdir/*.raw); do
   time=$(stat -c %Y $f)
 
   #terminate running server(s)
-  pkill random-test-server
+  pkill server
 
   $replayer $f MODBUS $pno 1 > /dev/null 2>&1 &
-  timeout -k 0 -s SIGUSR1 3s ./random-test-server $pno > /dev/null 2>&1
+  timeout -k 0 -s SIGUSR1 3s ./server $pno > /dev/null 2>&1
   
   wait
   cov_data=$(gcovr -r .. -s | grep "[lb][a-z]*:")
@@ -57,10 +57,10 @@ for f in $(echo $folder/$testdir/id*); do
   time=$(stat -c %Y $f)
 
   #terminate running server(s)
-  pkill random-test-server
+  pkill server
   
   $replayer $f MODBUS $pno 1 > /dev/null 2>&1 &
-  timeout -k 0 -s SIGUSR1 3s ./random-test-server $pno > /dev/null 2>&1
+  timeout -k 0 -s SIGUSR1 3s ./server $pno > /dev/null 2>&1
 
   wait
   count=$(expr $count + 1)

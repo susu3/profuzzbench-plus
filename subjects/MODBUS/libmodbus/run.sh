@@ -26,7 +26,7 @@ if $(strstr $FUZZER "afl"); then
   #Move to fuzzing folder
   cd $WORKDIR/${TARGET_DIR}/tests
   echo "$WORKDIR/${TARGET_DIR}/tests"
-  timeout -k 0 --preserve-status $TIMEOUT /home/ubuntu/${FUZZER}/afl-fuzz -d -i ${INPUTS} -x ${WORKDIR}/modbus.dict -o $OUTDIR -N tcp://127.0.0.1/1502 $OPTIONS ./random-test-server 1502
+  timeout -k 0 --preserve-status $TIMEOUT /home/ubuntu/${FUZZER}/afl-fuzz -d -i ${INPUTS} -o $OUTDIR -N tcp://127.0.0.1/1502 $OPTIONS ./server 1502
 
   STATUS=$?
 
