@@ -9,7 +9,7 @@ diff -urN a/configure.ac b/configure.ac
  AM_INIT_AUTOMAKE([check-news foreign 1.11 -Wall -Wno-portability silent-rules tar-pax subdir-objects])
 -AC_PROG_CC
 +#check C compiler
-+AC_PROG_CC([afl-clang-fast clang gcc]) 
++AC_PROG_CC([clang gcc]) 
  AC_USE_SYSTEM_EXTENSIONS
  AC_SYS_LARGEFILE
  AC_CONFIG_MACRO_DIR([m4])
